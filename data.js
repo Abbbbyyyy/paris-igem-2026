@@ -1,0 +1,85 @@
+/* 坐标是地点定位，非入口测绘。时间是计划值；实时交通以导航为准。 */
+window.TRIP={
+ sources:{versailles:'https://en.chateauversailles.fr/plan-your-visit/practical-information',louvre:'https://www.louvre.fr/en/visit/hours-admission/tickets-and-prices',arc:'https://www.paris-arc-de-triomphe.fr/en/visit/practical-information',notre:'https://www.notredamedeparis.fr/en/visit/reservation-free/',eiffel:'https://www.toureiffel.paris/en/the-monument/lights',fares:'https://www.iledefrance-mobilites.fr/tarifs-titre-de-transport-en-commun-2026',hotel:'https://www.paix-paris-hotel.com/location',opera:'https://www.operadeparis.fr/en/visits/palais-garnier',orsay:'https://www.musee-orsay.fr/en/visit',petit:'https://www.petitpalais.paris.fr/visiter/preparer-votre-visite',igem:'https://jamboree.igem.org/'},
+ places:{
+ cdg:{name:'戴高乐机场 T2E',fr:'Paris Charles de Gaulle · Terminal 2E',ll:[49.0035,2.5805],address:'Terminal 2E, Aéroport Paris-Charles de Gaulle',tip:'机场标记为航站楼附近，不是登机口。按机票与航显找航站楼、值机区和登机口。',source:'https://www.parisaeroport.fr/'},
+ hotel:{name:'酒店 · Hôtel de la Paix',fr:'Hôtel de la Paix Paris 15',ll:[48.838710,2.288715],address:'43 Rue Duranton, 75015 Paris',tip:'11月12日先寄存行李；提前向酒店确认早晨寄存。11月17日退房后再次寄存。坐标由法国官方地址服务核对。',source:'https://www.paix-paris-hotel.com/location'},
+ venue:{name:'iGEM 会场',fr:'Paris Convention Centre · Pavilion 7.3',ll:[48.8285,2.2887],address:'Paris Expo Porte de Versailles, 1 Place de la Porte de Versailles, 75015 Paris',tip:'坐标为7号馆附近，园区步行不可忽略。入园后按iGEM指示前往7.3；需参会凭证。日程来自你提供的旅行资料，队伍任务优先。',source:'https://jamboree.igem.org/'},
+ boucicaut:{name:'Boucicaut 地铁站',fr:'Boucicaut · Métro 8',ll:[48.8410,2.2879],address:'Avenue Félix Faure, 75015 Paris',tip:'酒店附近M8站；往市中心通常乘Créteil–Préfecture方向，返回乘Balard方向。'},
+ convention:{name:'Convention 地铁站',fr:'Convention · Métro 12',ll:[48.8373,2.2966],address:'Rue de Vaugirard / Rue de la Convention, Paris',tip:'M12返酒店可在这里下车；步行仍需约10–15分钟。'},
+ porte:{name:'Porte de Versailles 地铁站',fr:'Porte de Versailles · Métro 12',ll:[48.8326,2.2880],address:'Place de la Porte de Versailles, Paris',tip:'出馆到站建议留10–20分钟；不要把园区大门到展厅的距离漏掉。'},
+ invalides:{name:'Invalides 换乘站',fr:'Invalides · M8 / M13 / RER C',ll:[48.8628,2.3145],address:'Esplanade des Invalides, Paris',tip:'RER C有多条支线，去凡尔赛必须确认终点Versailles Château–Rive Gauche；不是所有西行车都到。'},
+ vrg:{name:'凡尔赛宫左岸车站',fr:'Versailles Château–Rive Gauche · RER C',ll:[48.8002,2.1290],address:'Avenue du Général de Gaulle, Versailles',tip:'下车后步行约15分钟到宫殿广场，提前再留安检时间。'},
+ versailles:{name:'凡尔赛宫 · 13:30',fr:'Château de Versailles · Entrée A',ll:[48.8049,2.1204],address:'Place d’Armes, 78000 Versailles',tip:'你的已预约时段为13:30。散客通常走入口A，以票面为准。冬季宫殿17:30闭馆；建议13:00到广场。',source:'https://en.chateauversailles.fr/plan-your-visit/practical-information'},
+ saintmichel:{name:'圣米歇尔—圣母院站',fr:'Saint-Michel–Notre-Dame · RER B / C',ll:[48.8530,2.3441],address:'Place Saint-Michel, Paris',tip:'RER站与M4 Saint-Michel不是同一个站台；此前查到M4站施工，不能把RER到达等同于M4可上车。'},
+ notre:{name:'巴黎圣母院',fr:'Cathédrale Notre-Dame de Paris',ll:[48.8530,2.3499],address:'6 Parvis Notre-Dame – Place Jean-Paul II, 75004 Paris',tip:'教堂主体免费；预约非强制，但建议官网免费预约。周四通常开放至22:00，宗教活动可影响参观。塔楼不是同一种票。',source:'https://www.notredamedeparis.fr/en/visit/reservation-free/'},
+ latin:{name:'拉丁区 · 晚餐散步',fr:'Quartier Latin / Saint-Michel',ll:[48.8518,2.3442],address:'Place Saint-Michel, 75005 Paris',tip:'只设置餐饮区域，不假定某家餐厅有位。先看菜单和营业时间，首日疲劳时直接回酒店。'},
+ concorde:{name:'协和广场换乘站',fr:'Concorde · M1 / M8 / M12',ll:[48.8655,2.3211],address:'Place de la Concorde, Paris',tip:'会场到卢浮宫：M12转M1往Château de Vincennes。去George V：M1往La Défense。'},
+ louvreMetro:{name:'卢浮宫地铁站',fr:'Palais Royal–Musée du Louvre · M1 / M7',ll:[48.8627,2.3364],address:'Place du Palais Royal, Paris',tip:'下车后仍需步行至票面入口，并接受安检。'},
+ louvre:{name:'卢浮宫',fr:'Musée du Louvre · Pyramide',ll:[48.8606,2.3376],address:'Musée du Louvre, 75001 Paris',tip:'11月13日周五夜场，19:00为建议预约时间，未确认余票。21:00闭馆、20:30清场。准备原始PDF电子票，不只存截图。',source:'https://www.louvre.fr/en/visit/hours-admission/tickets-and-prices'},
+ abbesses:{name:'Abbesses · 爱墙',fr:'Le Mur des Je t’aime / Abbesses',ll:[48.8848,2.3385],address:'Square Jehan Rictus, Place des Abbesses, Paris',tip:'爱墙在有开放时间的公园内，晚间可能已关闭。夜间以Abbesses街区为集合点，不承诺能进入爱墙公园。'},
+ sacre:{name:'圣心大教堂与蒙马特',fr:'Basilique du Sacré-Cœur de Montmartre',ll:[48.8867,2.3431],address:'35 Rue du Chevalier de la Barre, 75018 Paris',tip:'山坡步行有台阶；此安排以外部城市夜景为主，不含穹顶。下雨路滑时缩短行程。',source:'https://www.sacre-coeur-montmartre.com/'},
+ pigalle:{name:'Pigalle 夜生活街区',fr:'Place Pigalle',ll:[48.8823,2.3372],address:'Place Pigalle, 75009 Paris',tip:'公共街区外观散步，无需门票。沿主路去红磨坊，店内消费先核价，不跟随街头拉客。',source:'https://parisjetaime.com/transport/quartier-pigalle-p1928'},
+ moulin:{name:'红磨坊外观',fr:'Moulin Rouge / Blanche',ll:[48.8841,2.3323],address:'82 Boulevard de Clichy, 75018 Paris',tip:'此处只安排风车外观拍照，不含演出票。回Pigalle可乘M12直回酒店附近。'},
+ george:{name:'George V · 凯旋门外观',fr:'George V / Avenue des Champs-Élysées',ll:[48.8710,2.3005],address:'Avenue des Champs-Élysées, 75008 Paris',tip:'在宽人行道向凯旋门拍摄，沿大街走约10–15分钟。站在人行道拍到的是斜正面，不为了正中构图进入车道。'},
+ passage:{name:'凯旋门地下通道入口',fr:'Passage du Souvenir · Champs-Élysées side',ll:[48.8730,2.2970],address:'香榭丽舍大街顶端，按Arc de Triomphe地下通道标识',tip:'定位仅辅助找路，跟随现场入口标识。绝对不要横穿环岛。'},
+ arc:{name:'凯旋门 · 登顶',fr:'Arc de Triomphe',ll:[48.8738,2.2950],address:'Place Charles de Gaulle, 75008 Paris',tip:'建议19:15左右入场，争取20:00在露台远看铁塔闪灯。冬季22:30关闭，最后进入21:45。通常需爬284级台阶，检查电梯及临时关闭公告。',source:'https://www.paris-arc-de-triomphe.fr/en/visit/practical-information'},
+ trocadero:{name:'特罗卡德罗 · 铁塔全景',fr:'Parvis des Droits de l’Homme',ll:[48.8617,2.2886],address:'Palais de Chaillot, 75016 Paris',photo:true,tip:'首选正面全景机位；建议20:45抵达，21:00看5分钟闪灯。可从平台两侧找较少人的位置。',source:'https://www.toureiffel.paris/en/news/visit/what-see-around-eiffel-tower'},
+ iena:{name:'耶拿桥 · 铁塔近景',fr:'Pont d’Iéna',ll:[48.8599,2.2923],address:'Pont d’Iéna, Paris',photo:true,tip:'适合近距离钢结构和桥面前景；在人行区域拍摄，不站车道或骑行道。'},
+ eiffel:{name:'埃菲尔铁塔 · 只看外观',fr:'Tour Eiffel',ll:[48.8584,2.2945],address:'5 Avenue Anatole France, 75007 Paris',photo:true,tip:'本行程不登塔，也不购买塔票。天黑后整点闪灯5分钟；灯光可能因特殊活动调整。',source:'https://www.toureiffel.paris/en/the-monument/lights'},
+ bir:{name:'比尔哈凯姆桥 · 河景',fr:'Pont de Bir-Hakeim',ll:[48.8559,2.2870],address:'Pont de Bir-Hakeim, Paris',photo:true,tip:'铁塔＋塞纳河＋桥柱。若疲惫或下雨可跳过。沿上层街道人行道前往，不必走下层河岸。'},
+ birMetro:{name:'Bir-Hakeim 地铁站',fr:'Bir-Hakeim · Métro 6',ll:[48.8539,2.2894],address:'Boulevard de Grenelle, Paris',tip:'M6往Nation，到La Motte-Picquet–Grenelle转M8往Balard，Boucicaut下车。'},
+ opera:{name:'加尼叶歌剧院',fr:'Palais Garnier',ll:[48.8719,2.3316],address:'Place de l’Opéra, 75009 Paris',tip:'可选建议，需核实当天开放及票额。一般参观10:00起；观众厅可能因排练关闭，门票不保证进入。',source:'https://www.operadeparis.fr/en/visits/palais-garnier'},
+ orsay:{name:'奥赛博物馆',fr:'Musée d’Orsay',ll:[48.8600,2.3266],address:'Esplanade Valéry Giscard d’Estaing, 75007 Paris',tip:'周二09:30起，周一闭馆。17日上午的可选主项目，与小皇宫二选一；12:00左右离馆。',source:'https://www.musee-orsay.fr/en/visit'},
+ petit:{name:'小皇宫 · 轻松备选',fr:'Petit Palais',ll:[48.8660,2.3146],address:'Avenue Winston Churchill, 75008 Paris',tip:'永久收藏免费免预约，周二至周日10:00–18:00。17日与奥赛二选一，不能全部塞入。',source:'https://www.petitpalais.paris.fr/visiter/preparer-votre-visite'},
+ alexandre:{name:'亚历山大三世桥',fr:'Pont Alexandre III',ll:[48.8639,2.3136],address:'Pont Alexandre III, Paris',photo:true,tip:'小皇宫旁的轻松散步点，可看荣军院方向；返程日控制时间。'}
+ },
+ days:[
+ {id:'12',date:'2026-11-12',label:'周四',title:'抵达，赴凡尔赛之约',subtitle:'ARRIVAL / VERSAILLES',summary:'保留13:30预约为首要约束。航班、酒店寄存及iGEM时间沿用此前提供的行程资料；所有交通耗时为预算，不是实时班次。首晚不再强塞Pigalle。',stops:[
+ {id:'arrival',place:'cdg',time:'06:00–08:00',start:'06:00',end:'08:00',status:'资料中的航班',text:'MU553抵达CDG T2E。入境、取行李、找RER B车站预计1.5–2小时，实际可能更久。准备护照、酒店信息和参会材料。',mode:'transit',transport:'下一段：RER B往巴黎 → Denfert-Rochereau换M6往Charles de Gaulle–Étoile → La Motte-Picquet–Grenelle换M8往Balard → Boucicaut步行到酒店。预算90–110分钟。机场专用票€14。'},
+ {id:'drop',place:'hotel',time:'09:30–10:30',start:'09:30',end:'10:30',text:'寄存行李、早餐、整理小背包。若晚于11:00才到酒店，缩短早餐和午餐，优先赶凡尔赛；晚点严重时联系景点了解预约规则。',mode:'transit',transport:'10:30左右出发：步行Boucicaut → M8往Créteil–Préfecture至Invalides → RER C终点Versailles Château–Rive Gauche → 步行15分钟。含等车预算75–90分钟；普通地铁火车票€2.55。'},
+ {id:'v-lunch',place:'vrg',time:'12:00–12:45',start:'12:00',end:'12:45',text:'车站至宫殿沿路简单午餐。不去绕路的市场，不在这时排长队。',mode:'walking',transport:'下一段：步行至Place d’Armes与入口A，13:00前抵达。'},
+ {id:'v-palace',place:'versailles',time:'13:00到场 · 13:30–16:30',start:'13:00',end:'16:30',status:'已预约13:30',bookable:true,booked:true,text:'13:00预留安检。按已购票范围看宫殿与镜厅，天气允许再短看花园；不默认票含特里亚农。不要为赶下一站把预约参观压缩过度。',mode:'transit',transport:'16:30离开宫殿，步行到RER站 → RER C往巴黎至Saint-Michel–Notre-Dame。预计70–90分钟，查当天施工。€2.55。'},
+ {id:'dinner12',place:'latin',time:'18:00–18:50',start:'18:00',end:'18:50',text:'先吃晚饭、休息。若飞机上没有睡好，可以取消圣母院并回酒店，另找空档。',mode:'walking',transport:'步行约10分钟至圣母院；预留预约队列和安检时间。'},
+ {id:'nd',place:'notre',time:'19:00–20:00',start:'19:00',end:'20:00',status:'计划 · 免费预约待办',bookable:true,text:'主体教堂免费。建议预约19:00附近时段，以官网放票为准；尊重礼拜安排。此时段未替你预订。',mode:'transit',transport:'返回：步行Odéon约15分钟 → M10往Boulogne至La Motte-Picquet–Grenelle → M8往Balard至Boucicaut → 酒店。预算45–60分钟，€2.55。'},
+ {id:'sleep12',place:'hotel',time:'21:00左右',start:'21:00',end:'21:30',text:'办理入住、充电、准备第二天参会用品。把长途飞行后的恢复时间保留下来。'}]},
+ {id:'13',date:'2026-11-13',label:'周五',title:'白天 iGEM，夜访卢浮宫',subtitle:'SCIENCE / LOUVRE',summary:'你明确安排的卢浮宫夜场。19:00为建议购票时段而非已确认预约；有效观展约75–90分钟。不要依赖闭馆后在庭院逗留。',stops:[
+ {id:'igem13',place:'venue',time:'09:00–18:00',start:'09:00',end:'18:00',status:'参会计划',text:'08:20–08:30从酒店出发，园区入口到7.3还需步行。下午休息时先吃些东西；18:00是否能离开以队伍安排为准。',mode:'transit',transport:'18:00离开展馆 → 步行Porte de Versailles → M12往Mairie d’Aubervilliers至Concorde → M1往Château de Vincennes至Palais Royal–Musée du Louvre。连步行、等车、安检预算55–70分钟。€2.55。'},
+ {id:'louvre13',place:'louvre',time:'18:50到场 · 19:00–20:30',start:'19:00',end:'20:30',status:'你已计划 · 票待确认',bookable:true,text:'若18:00才离开展厅，19:00可能较紧：准时散场、不要中途正式吃饭。重点看胜利女神、蒙娜丽莎及加纳的婚礼；维纳斯视排队和开放情况追加。原始PDF离线保存，带证件。普通非EEA票参考€32。',mode:'walking',transport:'20:30开始清场，21:00闭馆。官网现列Cour Napoléon至21:00，不再安排21:00后院内拍照；离馆途中能拍就拍。'},
+ {id:'dinner13',place:'louvreMetro',time:'20:50–21:45',start:'20:50',end:'21:45',text:'Palais Royal / Rue de Rivoli附近晚餐。餐厅营业与空位现场确认。',mode:'transit',transport:'M1往La Défense至Concorde → M8往Balard至Boucicaut → 步行酒店。预算40–55分钟，€2.55。'},
+ {id:'sleep13',place:'hotel',time:'22:30左右',start:'22:30',end:'23:00',text:'保存第二天会场安排。若夜场已约其他时间，以实际票面覆盖这里的建议。'}]},
+ {id:'14',date:'2026-11-14',label:'周六',title:'蒙马特与 Pigalle 的夜色',subtitle:'OPTIONAL / MONTMARTRE',summary:'这是给“非固定时间”项目安排的可选晚上，不是新增预约。如果队伍有晚间活动，可整段取消。11月夜间看不到白天街景，爱墙公园也可能关门。',stops:[
+ {id:'igem14',place:'venue',time:'09:00–18:00',start:'09:00',end:'18:00',status:'参会计划',text:'以比赛、展示、交流及队伍集合安排优先。离开前先简餐。',mode:'transit',transport:'Porte de Versailles → M12往Mairie d’Aubervilliers，Abbesses下车。连出馆和步行预算50–65分钟，€2.55。'},
+ {id:'abbesses14',place:'abbesses',time:'19:00–19:20',start:'19:00',end:'19:20',optional:true,text:'街区散步。爱墙只在公园开放时进入；本站很深，有电梯则优先用电梯。',mode:'walking',transport:'步行上山约15–25分钟到圣心大教堂；有台阶和坡度。'},
+ {id:'sacre14',place:'sacre',time:'19:40–20:10',start:'19:40',end:'20:10',optional:true,text:'外部平台看巴黎夜景；教堂内参观遵守现场规则。雨天或太疲劳可直接去Pigalle用餐。',mode:'walking',transport:'沿有照明的街道下山至Pigalle，预算20–25分钟。'},
+ {id:'pigalle14',place:'pigalle',time:'20:30–21:15',start:'20:30',end:'21:15',optional:true,text:'晚餐和主街短逛，属于普通夜生活街区游览。',mode:'walking',transport:'沿Boulevard de Clichy向西步行约10分钟到红磨坊。'},
+ {id:'moulin14',place:'moulin',time:'21:25–21:40',start:'21:25',end:'21:40',optional:true,text:'红色风车外观留影，不含演出。不进入没有公开价格、主动拉客的场所。',mode:'transit',transport:'步行回Pigalle → M12往Mairie d’Issy至Convention → 步行酒店。预算50–60分钟，€2.55。'},
+ {id:'sleep14',place:'hotel',time:'22:40左右',start:'22:40',end:'23:00',text:'若跳过可选景点，会议结束后直接步行回酒店即可。'}]},
+ {id:'15',date:'2026-11-15',label:'周日',title:'登凯旋门，等铁塔亮起',subtitle:'ARC / EIFFEL BY NIGHT',summary:'按手写涂改与此前对话取11月15日。目标20:00凯旋门远景、21:00特罗卡德罗近景闪灯，但不保证赶上两次。不要因一周天气预报自行改动已订票。',stops:[
+ {id:'igem15',place:'venue',time:'09:00–18:00',start:'09:00',end:'18:00',status:'参会计划',text:'下午休息时先简餐。展厅散场、台阶和安检都可能拖慢计划，保留21:00的铁塔外观为主目标。',mode:'transit',transport:'步行至Porte de Versailles → M12至Concorde → M1往La Défense至George V。连出馆预算50–60分钟，€2.55。'},
+ {id:'george15',place:'george',time:'18:55–19:10',start:'18:55',end:'19:10',text:'沿香榭丽舍大街人行道向凯旋门走，拍外观与车流。夜间用主摄，拍人像避免超长曝光。',mode:'walking',transport:'步行10–15分钟至Passage du Souvenir入口，不能横穿环岛。'},
+ {id:'arc15',place:'arc',time:'19:15–20:15',start:'19:15',end:'20:15',status:'你已选择 · 票待确认',bookable:true,text:'普通票参考€16。安检和爬284级台阶预留20–30分钟；能赶上则20:00在露台面向铁塔看闪灯。错过无需等到21:00，应去特罗卡德罗。不能携带三脚架、自拍杆或大行李。',mode:'transit',transport:'下楼并走地下通道 → Charles de Gaulle–Étoile乘M6往Nation → Trocadéro。连出站预算25–35分钟，€2.55。'},
+ {id:'trocadero15',place:'trocadero',time:'20:45–21:05',start:'20:45',end:'21:05',text:'全晚首选观景点，20:55之前找好人行区域位置。21:00–21:05看完整铁塔闪灯；不必登塔。',mode:'walking',transport:'沿特罗卡德罗花园有照明的步道下行至耶拿桥，约15–20分钟。'},
+ {id:'iena15',place:'iena',time:'21:25–21:35',start:'21:25',end:'21:35',text:'近看塔身和桥面前景。若冷、累或下雨，就不再去比尔哈凯姆，导航回酒店。',mode:'walking',transport:'沿Quai Branly上层街道人行道向西南步行，约20–25分钟到比尔哈凯姆桥。不依赖下层河岸通行。'},
+ {id:'bir15',place:'bir',time:'21:55–22:10',start:'21:55',end:'22:10',optional:true,text:'可选补拍：塞纳河、铁塔、桥柱。恰好赶上22:00可再看闪灯，不为它额外久等。',mode:'transit',transport:'步行Bir-Hakeim站 → M6往Nation至La Motte-Picquet–Grenelle → M8往Balard至Boucicaut → 酒店。预算30–40分钟，€2.55。'},
+ {id:'sleep15',place:'hotel',time:'22:50左右',start:'22:50',end:'23:10',text:'如在特罗卡德罗结束：M6往Nation转M8同样可返酒店，省去约1小时步行。'}]},
+ {id:'16',date:'2026-11-16',label:'周一',title:'留白的上午，重要的下午',subtitle:'FLEXIBLE / iGEM',summary:'卢浮宫已放13日晚，上午无需再塞大馆。歌剧院是可选建议；若需要排练、休息或团队集合，取消上午观光。13:00–21:00沿用此前iGEM行程资料。',stops:[
+ {id:'morning16',place:'hotel',time:'08:30–09:00',start:'08:30',end:'09:00',text:'早餐后确认团队时间。只有不影响13:00参会时才去歌剧院。',mode:'transit',transport:'可选：Boucicaut乘M8往Créteil–Préfecture至Opéra，含步行预算40–50分钟，€2.55。'},
+ {id:'opera16',place:'opera',time:'10:00–11:10',start:'10:00',end:'11:10',optional:true,bookable:true,status:'建议 · 未订票',text:'需在线确认当天参观时段；大楼梯与大厅为重点。观众厅可能关闭。11:10必须离开，不再加购物。',mode:'transit',transport:'Opéra乘M8往Balard至Boucicaut → 酒店附近午餐 → 步行会场。预留约1小时交通与步行，12:30前抵达园区。'},
+ {id:'igem16',place:'venue',time:'13:00–21:00',start:'13:00',end:'21:00',status:'参会计划',text:'把下午和晚上完整留给iGEM。实际颁奖、闭幕或团队任务以最新官方日程为准。',mode:'walking',transport:'结束后按园区指示出场，步行回酒店约20–30分钟；晚餐根据现场活动调整。'},
+ {id:'sleep16',place:'hotel',time:'21:40以后',start:'21:40',end:'22:30',text:'整理行李，核对返程航班、机场交通和退房时间。'}]},
+ {id:'17',date:'2026-11-17',label:'周二',title:'最后一个上午，从容返航',subtitle:'ONE LAST WALK / DEPARTURE',summary:'默认留一个可选奥赛上午；小皇宫只放在“全部地点”作为替代，不安排两个馆。15:00从酒店出发去机场，比此前15:30建议多留30分钟余量。',stops:[
+ {id:'checkout',place:'hotel',time:'08:15–08:45',start:'08:15',end:'08:45',text:'退房，向前台确认行李领取时间。贵重物品与证件随身带，不把大行李带去博物馆。',mode:'transit',transport:'步行Convention → M12往Mairie d’Aubervilliers至Solférino → 步行奥赛；预算45–55分钟，€2.55。'},
+ {id:'orsay17',place:'orsay',time:'09:30–12:00',start:'09:30',end:'12:00',optional:true,bookable:true,status:'建议 · 可换小皇宫',text:'重点看印象派与自己感兴趣的作品。网上普通票参考€16，票种按官方结算。接待区在改造，按当天入口安排。不喜欢美术馆则改小皇宫10:00–11:30＋亚历山大三世桥，或直接休息。',mode:'transit',transport:'午餐后沿原路回酒店，安排13:30左右到店。不要把最后一个上午塞满。'},
+ {id:'bags17',place:'hotel',time:'13:30–15:00',start:'13:30',end:'15:00',text:'取行李、洗手、充电、查RER B实时运行和机场航显。15:00出发是目标，交通异常立即使用当天导航选择替代方式。',mode:'transit',transport:'Boucicaut → M8往Créteil至La Motte-Picquet–Grenelle → M6往Nation至Denfert-Rochereau → RER B往Aéroport Charles de Gaulle 2 TGV（不要坐Mitry-Claye支线）→ 步行T2E。含行李步行预算100–120分钟；机场票€14。'},
+ {id:'return',place:'cdg',time:'17:00到达 · 20:05起飞',start:'17:00',end:'20:05',status:'资料中的航班',text:'MU570，CDG T2E → 上海，预计北京时间11月18日14:35到达。航班与航站楼未实时查询；目标至少提前3小时到机场，办理值机、托运及出境。'}]}
+ ],
+ guides:[
+ {title:'预约与票夹',text:'凡尔赛13:30是你明确已预约的项目；卢浮宫19:00、凯旋门19:15及其他项目只是计划。勾选“已订票”只更新本机记录，不会购买门票。卢浮宫使用原始PDF；不要上传票码、护照或订单到公开仓库。',links:[['卢浮宫票务','https://ticket.louvre.fr/en'],['凯旋门官网','https://www.paris-arc-de-triomphe.fr/en'],['圣母院免费预约','https://www.notredamedeparis.fr/en/visit/reservation-free/']]},
+ {title:'交通票怎么选',text:'2026参考价：地铁/火车/RER单次€2.55，公交/电车€2.05，CDG机场票€14。地图不提供实时到站或实际路线计算。每次出发打开Bonjour RATP核对支线、施工及末班车；移动钱包Navigo与银行卡Apple Pay不是同一功能。行程变多时再比较通票，不预先认定单次票永远最省。',links:[['官方票价','https://www.iledefrance-mobilites.fr/tarifs-titre-de-transport-en-commun-2026'],['实时路线','https://www.bonjour-ratp.fr/']]},
+ {title:'夜景与天气',text:'拍铁塔首选特罗卡德罗；比尔哈凯姆是可取消的加项。看18:00–22:00逐小时降雨、阵风和能见度。不要仅凭一周前“晴/阴”图标改票；凯旋门可能因天气或仪式临时关闭。戴围巾、穿防滑鞋，带充电宝。',links:[['法国气象局','https://meteofrance.com/'],['官方摄影点','https://www.toureiffel.paris/en/news/visit/what-see-around-eiffel-tower']]},
+ {title:'计划的依据与边界',text:'手写图：12日凡尔赛→圣母院；13日iGEM后卢浮宫；凯旋门涂改处按15日晚理解。酒店、航班与参会时间来自此前对话所用行程资料，未重新认证。14日、16日上午及17日上午是建议。所有坐标用于找地点，入口按票面和现场标识。',links:[['凡尔赛开放信息','https://en.chateauversailles.fr/plan-your-visit/practical-information'],['iGEM官方','https://jamboree.igem.org/']]},
+ {title:'手机上怎么用',text:'联网打开地图；点击卡片或标记看地址，Google Maps按钮规划交通，Apple Maps按钮打开地点。完成勾选、票务状态及备注保存在当前浏览器。可导出日历（已带巴黎时区对应时间）和JSON备份；换设备需要导入备份。首次联网打开后文字可离线读取，地图瓦片与导航需要联网。',links:[]},
+ {title:'出门前一分钟',text:'护照/证件、门票原始PDF、手机电量、交通卡余额、队伍集合消息。不要跨越凯旋门环岛；夜间拍照站在人行道。紧急情况可拨112。返程日预留至少3小时机场手续，购物与退税另加时间。私人酒店位置会随网页一同公开，上传前请审视隐私。',links:[['酒店官方地址','https://www.paix-paris-hotel.com/location']]}
+ ]
+};
